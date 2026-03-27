@@ -1,4 +1,4 @@
-package com.nexus.wallet.userservice.Dto;
+package com.nexus.wallet.userservice.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
