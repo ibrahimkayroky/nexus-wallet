@@ -10,10 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nexus.wallet.userservice.Dto.UserResponse;
+import com.nexus.wallet.userservice.dto.UserResponse;
 import com.nexus.wallet.userservice.model.User;
 import com.nexus.wallet.userservice.service.UserService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -24,7 +25,7 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserResponse createUser(@RequestBody User user) {
+    public UserResponse createUser( @Valid @RequestBody User user) {
         return userService.CreateUser(user);
     }
 
