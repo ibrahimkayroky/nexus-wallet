@@ -1,8 +1,9 @@
 package com.nexus.wallet.userservice.service;
 
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import com.nexus.wallet.userservice.Dto.UserResponse;
+import com.nexus.wallet.userservice.dto.UserResponse;
 import com.nexus.wallet.userservice.model.User;
 import com.nexus.wallet.userservice.repository.UserRepository;
 
@@ -15,10 +16,18 @@ import lombok.extern.slf4j.Slf4j;
 public class UserService {
     private final UserRepository userRepository;
 
+    private final KafkaTemplate<String, String> kafkaTemplate;
     public UserResponse CreateUser(User user) {
-        log.info("Creating user {}", user.getUsername());
 
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+            throw new RuntimeException("Username already exists");
+        }
         User savedUser = userRepository.save(user);
+
+
+        log.info("Sending user to Kafka: {}", savedUser.getId());
+        kafkaTemplate.send("user-created-topic", savedUser.getUsername());
+
 
         return UserResponse.builder()
             .id(savedUser.getId())
