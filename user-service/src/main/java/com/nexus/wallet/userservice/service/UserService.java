@@ -26,7 +26,7 @@ public class UserService {
 
 
         log.info("Sending user to Kafka: {}", savedUser.getId());
-        kafkaTemplate.send("user-created-topic", savedUser.getUsername());
+        kafkaTemplate.send("user-created-topic", String.valueOf(savedUser.getId()));
 
 
         return UserResponse.builder()
